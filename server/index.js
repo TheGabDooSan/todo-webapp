@@ -2,14 +2,18 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 
-const pool = require('./database/db.js');
-const port = 199;
+const pool = require('./database/db');
+const port = 3000;
 
 app.use(cors());
 app.use(express.json());
 
+app.get('/discord', (req, res) => {
+    res.redirect('https://discord.gg/3E5ce9WY2a');
+});
+
 // CREATE A TODO
-app.post('/todos', async (req, res) => {
+app.post('/todos', async(req, res) => {
     try {
         const { description } = req.body;
         const newTodo = await pool.query('INSERT INTO todo (description) VALUES ($1) RETURNING *', [description]);
@@ -20,7 +24,7 @@ app.post('/todos', async (req, res) => {
 });
 
 // GET ALL TODOS
-app.get('/todos', async (req, res) => {
+app.get('/todos', async(req, res) => {
     try {
         const allTodos = await pool.query('SELECT * FROM todo');
         res.json(allTodos.rows);
@@ -30,7 +34,7 @@ app.get('/todos', async (req, res) => {
 });
 
 // GET A TODO
-app.get('/todos/:id', async (req, res) => {
+app.get('/todos/:id', async(req, res) => {
     try {
         const { id } = req.params;
         const todo = await pool.query('SELECT * FROM todo WHERE t_id = $1', [id]);
@@ -41,7 +45,7 @@ app.get('/todos/:id', async (req, res) => {
 });
 
 // DELETE A TODO
-app.delete('/todos/:id', async (req, res) => {
+app.delete('/todos/:id', async(req, res) => {
     try {
         const { id } = req.params;
         const deletedTodo = await pool.query('DELETE FROM todo WHERE t_id = $1', [id]);
@@ -52,7 +56,7 @@ app.delete('/todos/:id', async (req, res) => {
 });
 
 // EDIT A TODO
-app.put('/todos/:id', async (req, res) => {
+app.put('/todos/:id', async(req, res) => {
     try {
         const { description } = req.body;
         const { id } = req.params;
