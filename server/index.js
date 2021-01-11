@@ -3,14 +3,10 @@ const app = express();
 const cors = require('cors');
 
 const pool = require('./database/db');
-const port = 3000;
+const port = 199;
 
 app.use(cors());
 app.use(express.json());
-
-app.get('/discord', (req, res) => {
-    res.redirect('https://discord.gg/3E5ce9WY2a');
-});
 
 // CREATE A TODO
 app.post('/todos', async(req, res) => {
